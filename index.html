@@ -3,391 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POV Classification Quiz: Character Perspective</title>
+  <title>POV Matching Quiz - Drag and Drop</title>
   <style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --correct-bg: #ecfdf5;
-      --correct-border: #10b981;
-      --wrong-bg: #fef2f2;
-      --wrong-border: #ef4444;
-      --neutral-border: #d1d5db;
-      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-      --radius: 18px;
-    }
- 
-    * {
-      box-sizing: border-box;
-    }
- 
     body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
-      color: var(--text);
-      line-height: 1.6;
+      padding: 20px;
+      color: #222;
     }
  
     .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 32px 20px 60px;
-    }
- 
-    .header {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 28px;
-      margin-bottom: 24px;
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
  
     h1 {
-      margin: 0 0 10px;
-      font-size: 2rem;
+      margin-top: 0;
+      font-size: 28px;
     }
  
-    .subtitle {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1rem;
+    .instructions {
+      margin-bottom: 20px;
+      line-height: 1.6;
     }
  
-    .quiz-form {
-      display: grid;
-      gap: 20px;
-    }
- 
-    .question-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      border: 2px solid transparent;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
- 
-    .question-card:hover {
-      transform: translateY(-2px);
-    }
- 
-    .question-card.correct {
-      background: var(--correct-bg);
-      border-color: var(--correct-border);
-    }
- 
-    .question-card.incorrect {
-      background: var(--wrong-bg);
-      border-color: var(--wrong-border);
-    }
- 
-    .question-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
- 
-    .scenario {
-      margin: 0 0 16px;
-    }
- 
-    .options {
-      display: grid;
-      gap: 10px;
-    }
- 
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border: 1px solid var(--neutral-border);
-      border-radius: 12px;
-      cursor: pointer;
-      background: #fff;
-    }
- 
-    .option input {
-      margin: 0;
-      transform: scale(1.15);
-    }
- 
-    .feedback {
-      display: none;
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      background: rgba(255,255,255,0.7);
-    }
- 
-    .feedback.show {
-      display: block;
-    }
- 
-    .feedback strong {
-      display: block;
-      margin-bottom: 4px;
-    }
- 
-    .actions {
+    .bank {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 8px;
+      padding: 16px;
+      background: #eef4ff;
+      border: 2px dashed #9db9ff;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      min-height: 72px;
+    }
+ 
+    .choice {
+      padding: 12px 16px;
+      background: #2563eb;
+      color: white;
+      border-radius: 10px;
+      cursor: grab;
+      font-weight: bold;
+      user-select: none;
+      touch-action: none;
+    }
+ 
+    .question {
+      margin-bottom: 18px;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+ 
+    .drop-zone {
+      margin-top: 12px;
+      min-height: 54px;
+      border: 2px dashed #bbb;
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+ 
+    .drop-zone.over {
+      border-color: #2563eb;
+      background: #eef4ff;
+    }
+ 
+    .drop-zone.filled {
+      border-style: solid;
+    }
+ 
+    .feedback {
+      margin-top: 10px;
+      font-size: 15px;
+    }
+ 
+    .correct {
+      color: green;
+      font-weight: bold;
+    }
+ 
+    .incorrect {
+      color: red;
+      font-weight: bold;
     }
  
     button {
+      padding: 12px 20px;
+      font-size: 16px;
       border: none;
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 1rem;
-      font-weight: 700;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease;
+      margin-right: 10px;
+      margin-top: 10px;
     }
  
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
+    .check-btn {
+      background: #2563eb;
+      color: white;
     }
  
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-    }
- 
-    .btn-secondary {
+    .reset-btn {
       background: #e5e7eb;
-      color: var(--text);
+      color: #111;
     }
  
-    .btn-secondary:hover {
-      background: #d1d5db;
-      transform: translateY(-1px);
-    }
- 
-    .result-box {
-      display: none;
+    .result {
       margin-top: 24px;
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
+      padding: 16px;
+      background: #eef4ff;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      display: none;
     }
  
-    .result-box.show {
-      display: block;
-    }
- 
-    .score {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
- 
-    .result-note {
-      margin: 0;
-      color: var(--muted);
-    }
- 
-    .footer-note {
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
- 
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px 14px 40px;
-      }
- 
-      .header,
-      .question-card,
-      .result-box {
-        padding: 18px;
-      }
- 
-      h1 {
-        font-size: 1.55rem;
+    @media (max-width: 700px) {
+      .choice {
+        width: 100%;
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>POV Classification Quiz: Character Perspective</h1>
-      <p class="subtitle">
-        Instructions: For each scenario, determine if the gameplay qualifies as <strong>First-Person</strong> or <strong>Third-Person</strong> based on the camera’s relationship to the character.
-      </p>
+    <h1>POV Classification Quiz: Drag and Drop</h1>
+    <p class="instructions">
+      Drag each answer choice into the correct box under each scenario. Then click <strong>Check Answers</strong>.
+    </p>
+ 
+    <div class="bank" id="bank">
+      <div class="choice" draggable="true" id="choice1" data-value="A">First-Person POV</div>
+      <div class="choice" draggable="true" id="choice2" data-value="B">Third-Person POV</div>
+      <div class="choice" draggable="true" id="choice3" data-value="A">First-Person POV</div>
+      <div class="choice" draggable="true" id="choice4" data-value="B">Third-Person POV</div>
+      <div class="choice" draggable="true" id="choice5" data-value="B">Third-Person POV</div>
     </div>
  
-    <form class="quiz-form" id="quizForm">
-      <div class="question-card" data-question="1" data-answer="A">
-        <div class="question-title">1. Dungeon Exploration</div>
-        <p class="scenario">You are exploring a dungeon. You can see your character's hands holding a torch in front of you, but you cannot see your own head or back.</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q1" value="A"> A) First-Person POV</label>
-          <label class="option"><input type="radio" name="q1" value="B"> B) Third-Person POV</label>
-        </div>
-        <div class="feedback" id="feedback1"></div>
-      </div>
- 
-      <div class="question-card" data-question="2" data-answer="B">
-        <div class="question-title">2. Forest Run</div>
-        <p class="scenario">You are running through a forest. The camera is positioned behind the character, and you can see their entire body and backpack as they move.</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q2" value="A"> A) First-Person POV</label>
-          <label class="option"><input type="radio" name="q2" value="B"> B) Third-Person POV</label>
-        </div>
-        <div class="feedback" id="feedback2"></div>
-      </div>
- 
-      <div class="question-card" data-question="3" data-answer="A">
-        <div class="question-title">3. Looking Around the Room</div>
-        <p class="scenario">You are standing in a room. When you move the mouse to look around, the camera stays inside the head of the character, showing only what they would see.</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q3" value="A"> A) First-Person POV</label>
-          <label class="option"><input type="radio" name="q3" value="B"> B) Third-Person POV</label>
-        </div>
-        <div class="feedback" id="feedback3"></div>
-      </div>
- 
-      <div class="question-card" data-question="4" data-answer="B">
-        <div class="question-title">4. Strategy Game View</div>
-        <p class="scenario">You are playing a strategy game where you click on the ground to move a character. The camera is high in the sky looking down at the character from an angle.</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q4" value="A"> A) First-Person POV</label>
-          <label class="option"><input type="radio" name="q4" value="B"> B) Third-Person POV</label>
-        </div>
-        <div class="feedback" id="feedback4"></div>
-      </div>
- 
-      <div class="question-card" data-question="5" data-answer="B">
-        <div class="question-title">5. Emote Camera Pullback</div>
-        <p class="scenario">You press a button to “Emote” like waving or dancing. The camera suddenly pulls back so you can see your character performing the action from a distance.</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q5" value="A"> A) First-Person POV</label>
-          <label class="option"><input type="radio" name="q5" value="B"> B) Third-Person POV</label>
-        </div>
-        <div class="feedback" id="feedback5"></div>
-      </div>
- 
-      <div class="actions">
-        <button type="button" class="btn-primary" id="submitBtn">Check Answers</button>
-        <button type="reset" class="btn-secondary" id="resetBtn">Reset Quiz</button>
-      </div>
-    </form>
- 
-    <div class="result-box" id="resultBox">
-      <div class="score" id="scoreText"></div>
-      <p class="result-note" id="resultNote"></p>
-      <p class="footer-note">Rule of thumb: if the camera represents the character’s own direct line of sight, it is first-person. If the camera is outside the character and shows their body, it is third-person.</p>
+    <div class="question">
+      <p><strong>1.</strong> You are exploring a dungeon. You can see your character's hands holding a torch in front of you, but you cannot see your own head or back.</p>
+      <div class="drop-zone" data-question="1"></div>
+      <div class="feedback" id="f1"></div>
     </div>
+ 
+    <div class="question">
+      <p><strong>2.</strong> You are running through a forest. The camera is positioned behind the character, and you can see their entire body and backpack as they move.</p>
+      <div class="drop-zone" data-question="2"></div>
+      <div class="feedback" id="f2"></div>
+    </div>
+ 
+    <div class="question">
+      <p><strong>3.</strong> You are standing in a room. When you move the mouse to look around, the camera stays inside the head of the character, showing only what they would see.</p>
+      <div class="drop-zone" data-question="3"></div>
+      <div class="feedback" id="f3"></div>
+    </div>
+ 
+    <div class="question">
+      <p><strong>4.</strong> You are playing a strategy game where you click on the ground to move a character. The camera is high in the sky looking down at the character from an angle.</p>
+      <div class="drop-zone" data-question="4"></div>
+      <div class="feedback" id="f4"></div>
+    </div>
+ 
+    <div class="question">
+      <p><strong>5.</strong> You press a button to emote like waving or dancing. The camera suddenly pulls back so you can see your character performing the action from a distance.</p>
+      <div class="drop-zone" data-question="5"></div>
+      <div class="feedback" id="f5"></div>
+    </div>
+ 
+    <button class="check-btn" onclick="checkAnswers()">Check Answers</button>
+    <button class="reset-btn" onclick="resetQuiz()">Reset</button>
+ 
+    <div class="result" id="result"></div>
   </div>
  
   <script>
-    const explanations = {
-      1: {
-        answer: 'A',
-        label: 'First-Person POV',
-        why: 'The camera represents the character\'s direct line of sight.'
-      },
-      2: {
-        answer: 'B',
-        label: 'Third-Person POV',
-        why: 'Seeing the character\'s back means the camera is external.'
-      },
-      3: {
-        answer: 'A',
-        label: 'First-Person POV',
-        why: 'This is the eye-level perspective required for first-person gameplay.'
-      },
-      4: {
-        answer: 'B',
-        label: 'Third-Person POV',
-        why: 'Top-down or “God-view” perspectives are external to the character.'
-      },
-      5: {
-        answer: 'B',
-        label: 'Third-Person POV',
-        why: 'If the camera leaves the character\'s head to show their body, it becomes third-person.'
-      }
+    const answers = {
+      1: 'A',
+      2: 'B',
+      3: 'A',
+      4: 'B',
+      5: 'B'
     };
  
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const resultBox = document.getElementById('resultBox');
-    const scoreText = document.getElementById('scoreText');
-    const resultNote = document.getElementById('resultNote');
+    const explanations = {
+      1: 'First-Person POV: The camera represents the character’s direct line of sight.',
+      2: 'Third-Person POV: Seeing the character’s body from behind means the camera is external.',
+      3: 'First-Person POV: The camera stays inside the character’s head.',
+      4: 'Third-Person POV: A top-down view is outside the character.',
+      5: 'Third-Person POV: If the camera pulls back to show the full body, it becomes third-person.'
+    };
  
-    submitBtn.addEventListener('click', () => {
-      let score = 0;
-      let answeredCount = 0;
+    let dragged = null;
  
-      document.querySelectorAll('.question-card').forEach((card) => {
-        const questionNumber = card.dataset.question;
-        const correctAnswer = card.dataset.answer;
-        const selected = document.querySelector(`input[name="q${questionNumber}"]:checked`);
-        const feedback = document.getElementById(`feedback${questionNumber}`);
-        const correctInfo = explanations[questionNumber];
+    function addDragEvents() {
+      const choices = document.querySelectorAll('.choice');
+      choices.forEach(function(choice) {
+        choice.addEventListener('dragstart', function() {
+          dragged = this;
+        });
+      });
+    }
  
-        card.classList.remove('correct', 'incorrect');
-        feedback.classList.remove('show');
+    function addDropEvents() {
+      const zones = document.querySelectorAll('.drop-zone');
+      zones.forEach(function(zone) {
+        zone.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          this.classList.add('over');
+        });
  
-        if (!selected) {
-          feedback.innerHTML = `<strong>No answer selected.</strong>Please choose an option. Correct answer: ${correctInfo.answer}) ${correctInfo.label}. ${correctInfo.why}`;
-          feedback.classList.add('show');
-          return;
-        }
+        zone.addEventListener('dragleave', function() {
+          this.classList.remove('over');
+        });
  
-        answeredCount++;
+        zone.addEventListener('drop', function(e) {
+          e.preventDefault();
+          this.classList.remove('over');
  
-        if (selected.value === correctAnswer) {
-          score++;
-          card.classList.add('correct');
-          feedback.innerHTML = `<strong>Correct.</strong>${correctInfo.answer}) ${correctInfo.label}. ${correctInfo.why}`;
+          if (!dragged) return;
+ 
+          if (this.children.length > 0) {
+            document.getElementById('bank').appendChild(this.children[0]);
+          }
+ 
+          this.appendChild(dragged);
+          this.classList.add('filled');
+          dragged = null;
+        });
+      });
+ 
+      const bank = document.getElementById('bank');
+      bank.addEventListener('dragover', function(e) {
+        e.preventDefault();
+      });
+ 
+      bank.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!dragged) return;
+        bank.appendChild(dragged);
+        dragged = null;
+        updateFilledState();
+      });
+    }
+ 
+    function updateFilledState() {
+      const zones = document.querySelectorAll('.drop-zone');
+      zones.forEach(function(zone) {
+        if (zone.children.length === 0) {
+          zone.classList.remove('filled');
         } else {
-          card.classList.add('incorrect');
-          feedback.innerHTML = `<strong>Incorrect.</strong>Correct answer: ${correctInfo.answer}) ${correctInfo.label}. ${correctInfo.why}`;
+          zone.classList.add('filled');
+        }
+      });
+    }
+ 
+    function checkAnswers() {
+      let score = 0;
+ 
+      for (let i = 1; i <= 5; i++) {
+        const zone = document.querySelector('.drop-zone[data-question="' + i + '"]');
+        const feedback = document.getElementById('f' + i);
+ 
+        if (zone.children.length === 0) {
+          feedback.innerHTML = '<span class="incorrect">No answer placed.</span> ' + explanations[i];
+          continue;
         }
  
-        feedback.classList.add('show');
-      });
+        const value = zone.children[0].getAttribute('data-value');
  
-      resultBox.classList.add('show');
-      scoreText.textContent = `Score: ${score} / 5`;
- 
-      if (answeredCount < 5) {
-        resultNote.textContent = 'You left one or more questions unanswered. Review the feedback below each item.';
-      } else if (score === 5) {
-        resultNote.textContent = 'Perfect score. You classified every camera perspective correctly.';
-      } else if (score >+ 3) {
-	resultNote.textContent = 'Good job. You understand the core difference, but a few edge cases still need attention.';
-      } else { 
-	resultNote.textContent = 'Keep practicing. Focus on whether the camera is inside the character or outside the character.';
+        if (value === answers[i]) {
+          score++;
+          feedback.innerHTML = '<span class="correct">Correct.</span> ' + explanations[i];
+        } else {
+          feedback.innerHTML = '<span class="incorrect">Incorrect.</span> ' + explanations[i];
+        }
       }
-      resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    resetBtn.addEventListener('click', () => {
-      document.querySelectorAll('.question-card')forEach((card) => {
-	card.classList.remove('correct', 'incorrect');
+ 
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = 'Your score: ' + score + ' / 5';
+    }
+ 
+    function resetQuiz() {
+      const bank = document.getElementById('bank');
+      const zones = document.querySelectorAll('.drop-zone');
+      const allChoices = document.querySelectorAll('.choice');
+ 
+      allChoices.forEach(function(choice) {
+        bank.appendChild(choice);
       });
-      document.querySelectorAll('.feedback')forEach((feedback) => {
-	feedback.classList.remove('show');
-        feedback.innerHTML = '';
+ 
+      zones.forEach(function(zone) {
+        zone.classList.remove('filled', 'over');
       });
-      resultBox.classList.remove('show');
-      scoreText.textContent = '';
-      resultNote.textContent = '';
-    });
+ 
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById('f' + i).innerHTML = '';
+      }
+ 
+      const result = document.getElementById('result');
+      result.style.display = 'none';
+      result.innerHTML = '';
+    }
+ 
+    addDragEvents();
+    addDropEvents();
   </script>
 </body>
 </html>
-
